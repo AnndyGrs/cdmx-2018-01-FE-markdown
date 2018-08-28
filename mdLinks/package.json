@@ -1,8 +1,8 @@
 {
-  "name": "cdmx-2018-01-fe-markdown",
+  "name": "mdlinks",
   "version": "1.0.0",
-  "description": "Creacion de libreria mdLinks",
-  "main": "index.js",
+  "description": "Creacion de la libreria mdLinks",
+  "main": "app.js",
   "scripts": {
     "test": "jest"
   },
@@ -15,9 +15,5 @@
   "bugs": {
     "url": "https://github.com/AnndyGrs/cdmx-2018-01-FE-markdown/issues"
   },
-  "homepage": "https://github.com/AnndyGrs/cdmx-2018-01-FE-markdown#readme",
-  "devDependencies": {
-    "eslint": "^5.4.0",
-    "eslint-config-airbnb-base": "^13.1.0"
-  }
+  "homepage": "https://github.com/AnndyGrs/cdmx-2018-01-FE-markdown#readme"
 }
