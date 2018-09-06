@@ -67,5 +67,4 @@ const validateURL = (info) => {
 const urlStats = (urlStatus) => {
   let total = [];
   let unique = [];
-
 };
