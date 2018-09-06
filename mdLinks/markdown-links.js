@@ -8,8 +8,8 @@ const validatePath = (route) => {
   if (route === undefined) {
     console.log('No es una ruta valida');
   } else {
-    let pathFile = path.resolve(route);
-    return pathFile;
+    route = path.resolve(route);    
+    return route;
   }
 };
 
@@ -49,7 +49,7 @@ const getUrl = (data) => {
 
 const validateURL = (info) => {
   let urlStatus = info.map((obj) => {
-    return {status: '', ...obj}
+    return { status: '', ...obj }
   });
   urlStatus.forEach(links => {
     fetch(links.href).then((response) => {
@@ -59,12 +59,40 @@ const validateURL = (info) => {
         links.status = `${response.status} OK`;
       }
       console.log(urlStatus);
-      // urlStats(urlStatus);
+      urlStats(urlStatus);
+      statsAndValidate(urlStatus);
     });
   });
 };
 
 const urlStats = (urlStatus) => {
-  let total = [];
-  let unique = [];
+  let total = 0;
+  let unique = 0;
+  let broken = 0;
+  urlStatus.forEach(links => {
+    if (links.status == '200 OK') {
+      unique++;
+    } else {
+      broken++;
+    }
+  });
+  total = unique + broken;
+  console.log('Total: ' + total + ', Unique: ' + unique);
+  return console.log(total, unique);  
+};
+
+const statsAndValidate = (urlStatus) => {
+  let unique = 0;
+  let broken = 0;
+  let total = 0;
+  urlStatus.forEach(links => {
+    if (links.status == '200 OK') {
+      unique++;
+    } else {
+      broken++;
+    }
+  });
+  total = unique + broken;
+  console.log('Total: ' + total + ', Unique: ' + unique + ', Broken: ' + broken);
+  return total, unique, broken;
 };
