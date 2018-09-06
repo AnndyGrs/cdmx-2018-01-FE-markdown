@@ -78,7 +78,7 @@ const urlStats = (urlStatus) => {
   });
   total = unique + broken;
   console.log('Total: ' + total + ', Unique: ' + unique);
-  return console.log(total, unique);  
+  return total, unique;  
 };
 
 const statsAndValidate = (urlStatus) => {
