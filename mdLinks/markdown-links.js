@@ -4,95 +4,120 @@ const path = require('path');
 
 const route = '../README.md';
 
-const validatePath = (route) => {
-  if (route === undefined) {
-    console.log('No es una ruta valida');
-  } else {
-    route = path.resolve(route);    
-    return route;
-  }
-};
-
-const readFile = (errCallback, callBack) => {
-  fs.readFile(route, 'utf8', (err, data) => {
-    if (err) {
-      errCallback(err);
-    } else {
-      callBack(data);
-    }
+const mdLinks = (route) => {
+  return new Promise((resolve, reject) => {
+    if (!route) return reject('Error en mdLinks');
+    return resolve(route);
   });
 };
 
-readFile((err) => console.log(err), data => getUrl(data));
+mdLinks(route)
+  .then(result => validatePath(result))
+  .then(result => readFile(result))
+  .then(result => getUrl(result))
+  .then(result => validateURL(result))
+  .then(result => urlStats(result))
+  // .then(result => statsAndValidate(result))
+  .catch(err => {
+    console.log('Error: ', err);
+  });
+
+const validatePath = (route) => {
+  return new Promise((resolve, reject) => {
+    if (!route) return reject('Error en ruta');
+    return resolve(path.resolve(route));
+  });
+};
+
+const readFile = (route) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(route, 'utf8', ((err, data) => {
+      if (err) return reject('Error al leer el archivo');
+      return resolve(data);
+    }));
+  });
+};
 
 const getUrl = (data) => {
-  const rgExLink = /(http:\/\/|https:\/\/|www\.)[^\s]+/gim;
-  const rgExText = /\[[\¿A-Za-záéíóúÁÉÍÓÚ_ \.\?\(\)\\\/\-$]*\]\(/gim;
-  const arrText = data.match(rgExText);
-  const arrLinks = data.match(rgExLink);
-  for (let i = 0; i < arrText.length; i++) {
-    arrText[i] = arrText[i].slice(1, -2);
-  }
-  for (let i = 0; i < arrLinks.length; i++) {
-    arrLinks[i] = arrLinks[i].slice(0, -1);
-  }
-  let info = [];
-  for (let i = 0; i < arrLinks.length; i++) {
-    info.push({
-      href: arrLinks[i],
-      text: arrText[i],
-      file: validatePath(route)
-    });
-  }
-  validateURL(info);
+  return new Promise((resolve, reject) => {
+    if (!data) return reject('Error al conseguir links');
+    const rgExLink = /(http:\/\/|https:\/\/|www\.)[^\s]+/gim;
+    const rgExText = /\[[\¿A-Za-záéíóúÁÉÍÓÚ_ \.\?\(\)\\\/\-$]*\]\(/gim;
+    const arrText = data.match(rgExText);
+    const arrLinks = data.match(rgExLink);
+    for (let i = 0; i < arrText.length; i++) {
+      arrText[i] = arrText[i].slice(1, -2);
+    }
+    for (let i = 0; i < arrLinks.length; i++) {
+      arrLinks[i] = arrLinks[i].slice(0, -1);
+    }
+    let info = [];
+    for (let i = 0; i < arrLinks.length; i++) {
+      info.push({
+        href: arrLinks[i],
+        text: arrText[i],
+        file: validatePath(route)
+      });
+    };
+    return resolve(info);
+  });
 };
 
+
 const validateURL = (info) => {
-  let urlStatus = info.map((obj) => {
-    return { status: '', ...obj }
-  });
-  urlStatus.forEach(links => {
-    fetch(links.href).then((response) => {
-      if (response.status === 404) {
-        links.status = `${response.status} FAIL`;
-      } else {
-        links.status = `${response.status} OK`;
-      }
-      console.log(urlStatus);
-      urlStats(urlStatus);
-      statsAndValidate(urlStatus);
+  return new Promise((resolve, reject) => {
+    if (!info) return reject('Error al validar links');
+    let urlStatus = info.map((obj) => {
+      return { status: '', ...obj }
+    });
+    urlStatus.forEach(links => {
+      fetch(links.href).then((response) => {
+        if (response.status === 404) {
+          links.status = '404 FAIL';
+        } else {
+          links.status = '200 OK';
+        }
+        // console.log(urlStatus);
+        return resolve(urlStatus);
+      });
     });
   });
 };
 
 const urlStats = (urlStatus) => {
-  let total = 0;
-  let unique = 0;
-  let broken = 0;
-  urlStatus.forEach(links => {
-    if (links.status == '200 OK') {
-      unique++;
-    } else {
-      broken++;
-    }
+  return new Promise((resolve, reject) => {
+    if (!urlStatus) return reject('Error al leer status');
+    let total = 0;
+    let unique = 0;
+    let broken = 0;
+    urlStatus.forEach(links => {
+      if (links.status == '200 OK') {
+        unique++;
+      } else {
+        broken++;
+      }
+    });
+    total = unique + broken;
+    console.log('Total: ' + total + ', Unique: ' + unique);
+    return resolve(total, unique);
   });
-  total = unique + broken;
-  console.log('Total: ' + total + ', Unique: ' + unique);
-  return total, unique;  
 };
 
-const statsAndValidate = (urlStatus) => {
-  let unique = 0;
-  let broken = 0;
-  let total = 0;
-  urlStatus.forEach(links => {
-    if (links.status == '200 OK') {
-      unique++;
-    } else {
-      broken++;
-    }
-  });
-  total = unique + broken;
-  console.log('Total: ' + total + ', Unique: ' + unique + ', Broken: ' + broken);
-  return total, unique, broken;
-};
+// const statsAndValidate = (urlStatus) => {
+//   return new Promise((resolve, reject) => {
+//     if (!urlStatus) return reject('Error al leer status');
+//     let unique = 0;
+//     let broken = 0;
+//     let total = 0;
+//     urlStatus.forEach(links => {
+//       if (links.status == '200 OK') {
+//         unique++;
+//       } else {
+//         broken++;
+//       }
+//     });
+//     total = unique + broken;
+//     console.log('Total: ' + total + ', Unique: ' + unique + ', Broken: ' + broken);
+//     return resolve(total, unique, broken);
+//   });
+// };
