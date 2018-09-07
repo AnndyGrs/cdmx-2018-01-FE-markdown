@@ -1,0 +1,29 @@
+{
+  "name": "mdLinks",
+  "version": "1.0.0",
+  "description": "Creacion de la libreria mdLinks",
+  "main": "mdLinks/app.js",
+  "bin": {
+    "mdLinks": "mdLinks/app.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnndyGrs/cdmx-2018-01-FE-markdown.git"
+  },
+  "author": "Andrea Garcia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnndyGrs/cdmx-2018-01-FE-markdown/issues"
+  },
+  "homepage": "https://github.com/AnndyGrs/cdmx-2018-01-FE-markdown#readme",
+  "dependencies": {
+    "clear": "^0.1.0",
+    "fetch": "^1.1.0",
+    "jest": "^23.5.0",
+    "minimist-options": "^3.0.2",
+    "node-fetch": "^2.2.0"
+  }
+}
