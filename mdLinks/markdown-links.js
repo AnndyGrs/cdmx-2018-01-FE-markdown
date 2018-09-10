@@ -98,6 +98,7 @@ const urlStats = (urlStatus) => {
       }
     });
     total = unique + broken;
+    console.log('Total: ' + total + ', Unique: ' + unique);
     return resolve(total, unique);
   });
 };
@@ -116,6 +117,7 @@ const statsAndValidate = (urlStatus) => {
       }
     });
     total = unique + broken;
+    console.log('Unique: ' + unique + ', Broken: ' + broken + ', Total: ' + total);    
     return resolve(total, unique, broken);
   });
 };
