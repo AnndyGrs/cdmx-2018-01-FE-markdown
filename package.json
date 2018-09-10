@@ -4,7 +4,7 @@
   "description": "Creacion de la libreria mdLinks",
   "main": "mdLinks/app.js",
   "bin": {
-    "mdLinks": "mdLinks/app.js"
+    "mdLinks": "mdLinks/cli.js"
   },
   "scripts": {
     "test": "jest"
