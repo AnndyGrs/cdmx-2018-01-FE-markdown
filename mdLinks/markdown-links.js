@@ -17,7 +17,7 @@ mdLinks(route)
   .then(result => getUrl(result))
   .then(result => validateURL(result))
   .then(result => urlStats(result))
-  // .then(result => statsAndValidate(result))
+  .then(result => statsAndValidate(result))
   .catch(err => {
     console.log('Error: ', err);
   });
@@ -77,7 +77,7 @@ const validateURL = (info) => {
         } else {
           links.status = '200 OK';
         }
-        // console.log(urlStatus);
+        console.log(urlStatus);
         return resolve(urlStatus);
       });
     });
@@ -98,26 +98,26 @@ const urlStats = (urlStatus) => {
       }
     });
     total = unique + broken;
-    console.log('Total: ' + total + ', Unique: ' + unique);
     return resolve(total, unique);
   });
 };
 
-// const statsAndValidate = (urlStatus) => {
-//   return new Promise((resolve, reject) => {
-//     if (!urlStatus) return reject('Error al leer status');
-//     let unique = 0;
-//     let broken = 0;
-//     let total = 0;
-//     urlStatus.forEach(links => {
-//       if (links.status == '200 OK') {
-//         unique++;
-//       } else {
-//         broken++;
-//       }
-//     });
-//     total = unique + broken;
-//     console.log('Total: ' + total + ', Unique: ' + unique + ', Broken: ' + broken);
-//     return resolve(total, unique, broken);
-//   });
-// };
+const statsAndValidate = (urlStatus) => {
+  return new Promise((resolve, reject) => {
+    if (!urlStatus) return reject('Error al leer status');
+    let unique = 0;
+    let broken = 0;
+    let total = 0;
+    urlStatus.forEach(links => {
+      if (links.status == '200 OK') {
+        unique++;
+      } else {
+        broken++;
+      }
+    });
+    total = unique + broken;
+    return resolve(total, unique, broken);
+  });
+};
+
+module.exports = mdLinks;
