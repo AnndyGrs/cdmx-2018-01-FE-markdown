@@ -7,6 +7,8 @@
     "mdLinks": "mdLinks/cli.js"
   },
   "scripts": {
+    "eslint": "eslint --ext .js mdLinks/",
+    "pretest": "npm run eslint",
     "test": "jest"
   },
   "repository": {
@@ -21,6 +23,7 @@
   "homepage": "https://github.com/AnndyGrs/cdmx-2018-01-FE-markdown#readme",
   "dependencies": {
     "clear": "^0.1.0",
+    "eslint": "^5.5.0",
     "fetch": "^1.1.0",
     "jest": "^23.5.0",
     "minimist-options": "^3.0.2",
