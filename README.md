@@ -24,7 +24,7 @@ algunas estadísticas.
 
 Actualmente está en versión *Beta*, ya que todavía se encuentra en desarrollo.
 
-**v1.3.8** *(actual)* - Al ejecutar el comando `mdLinks` muestra un arreglo de objetos que contiene la siguiente información:
+**v1.3.10** *(actual)* - Al ejecutar el comando `mdLinks` muestra un arreglo de objetos que contiene la siguiente información:
 
 - `href`: URL encontrada.
 - `text`: Texto que aparecía dentro del link (`<a>`).
@@ -32,3 +32,21 @@ Actualmente está en versión *Beta*, ya que todavía se encuentra en desarrollo
 - `status`: Status de la URL (200 ó 404).
 
 También tiene implementadas las funciones `urlStats`, que indica cuántos URLs están online y cuantos hay en total; y `statsAndValidate`, que indica cuántos URLs hay en total, cuantos de ellos están online y cuantos fallan; sin embargo, no hay comando disponible para mostrar dicha información.
+
+## Instalación
+
+Para poder hacer uso de `mdLinks`, es necesario instalar algunas dependencias de `Node.js`.
+En tu terminal, ejecuta los siguientes comandos:
+
+- `npm install eslint`
+- `npm install node-fetch`
+
+## Uso
+
+Para poder usar `mdLinks` es necesario que sigas unos pasos:
+
+1. Forkea y clona este repositorio.
+2. Abre tu copia local.
+3. Dentro de la carpeta *mdLinks*, está el archivo `markdown-links.js`, en la linea **5** existe una variable llamada *route*. Dentro de las comillas, escribe la ruta donde se encuentra el archivo markdown a analizar.
+4. Abre tu terminal en tu carpeta local de `mdLinks`.
+5. Ejecuta el comando `mdLinks`, debería aparecer en tu terminal un arreglo de objetos con la información de las URLs encontradas en tu archivo.
