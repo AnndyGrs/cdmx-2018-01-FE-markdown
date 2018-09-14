@@ -2,7 +2,7 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const path = require('path');
 
-const route = '../README.md';
+const route = '../pruebas-links.md';
 
 const mdLinks = (route) => {
   return new Promise((resolve, reject) => {
@@ -16,7 +16,7 @@ mdLinks(route)
   .then(result => readFile(result))
   .then(result => getUrl(result))
   .then(result => validateURL(result))
-  .then(result => urlStats(result))
+  // .then(result => urlStats(result))
   .then(result => statsAndValidate(result))
   .catch(err => {
     console.log('Error: ', err);
@@ -56,7 +56,8 @@ const getUrl = (data) => {
       info.push({
         href: arrLinks[i],
         text: arrText[i],
-        file: validatePath(route)
+        file: validatePath(route),
+        status: ''
       });
     };
     return resolve(info);
@@ -67,57 +68,54 @@ const getUrl = (data) => {
 const validateURL = (info) => {
   return new Promise((resolve, reject) => {
     if (!info) return reject('Error al validar links');
-    let urlStatus = info.map((obj) => {
-      return { status: '', ...obj }
-    });
-    urlStatus.forEach(links => {
+    info.forEach(links => {
       fetch(links.href).then((response) => {
         if (response.status === 404) {
           links.status = '404 FAIL';
         } else {
           links.status = '200 OK';
         }
-        console.log(urlStatus);
-        return resolve(urlStatus);
+        console.log(info);
+        return resolve(info);
       });
     });
   });
 };
 
-const urlStats = (urlStatus) => {
-  return new Promise((resolve, reject) => {
-    if (!urlStatus) return reject('Error al leer status');
-    let total = 0;
-    let unique = 0;
-    let broken = 0;
-    urlStatus.forEach(links => {
-      if (links.status == '200 OK') {
-        unique++;
-      } else {
-        broken++;
-      }
-    });
-    total = unique + broken;
-    console.log('Total: ' + total + ', Unique: ' + unique);
-    return resolve(total, unique);
-  });
-};
+// const urlStats = (info) => {
+//   return new Promise((resolve, reject) => {
+//     if (!info) return reject('Error al leer status');
+//     let total = 0;
+//     let unique = 0;
+//     let broken = 0;
+//     info.forEach(links => {
+//       if (links.status === '200 OK') {
+//         unique++;
+//       } else {
+//         broken++;
+//       }
+//     });
+//     total = unique + broken;
+//     console.log('Total: ' + total + ', Unique: ' + unique);
+//     return resolve(total, unique);
+//   });
+// };
 
-const statsAndValidate = (urlStatus) => {
+const statsAndValidate = (info) => {
   return new Promise((resolve, reject) => {
-    if (!urlStatus) return reject('Error al leer status');
+    if (!info) return reject('Error al leer status');
     let unique = 0;
     let broken = 0;
     let total = 0;
-    urlStatus.forEach(links => {
-      if (links.status == '200 OK') {
+    info.forEach(links => {
+      if (links.status === '200 OK') {
         unique++;
       } else {
         broken++;
       }
     });
     total = unique + broken;
-    console.log('Unique: ' + unique + ', Broken: ' + broken + ', Total: ' + total);    
+    console.log('Unique: ' + unique + ', Broken: ' + broken + ', Total: ' + total);
     return resolve(total, unique, broken);
   });
 };
